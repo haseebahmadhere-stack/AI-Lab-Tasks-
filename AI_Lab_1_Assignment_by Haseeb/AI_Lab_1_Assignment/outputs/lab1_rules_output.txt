@@ -1,0 +1,29 @@
+SCHOLARSHIP SCREENING RESULTS
+
+Case: Pass
+Input: 85 True True True
+Expected: Review
+Actual: Review
+Reason: All conditions are satisfied.
+Test Passed: True
+
+Case: Identity Failure
+Input: 85 True False True
+Expected: Hold
+Actual: Hold
+Reason: Identity is not verified.
+Test Passed: True
+
+Case: Eligibility Failure
+Input: 85 True True False
+Expected: Hold
+Actual: Hold
+Reason: Eligibility is not confirmed.
+Test Passed: True
+
+Case: Boundary Test
+Input: 70 True True True
+Expected: Review
+Actual: Review
+Reason: Score is exactly at the minimum threshold.
+Test Passed: True
