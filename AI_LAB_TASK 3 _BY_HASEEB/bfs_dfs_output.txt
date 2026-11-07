@@ -1,0 +1,31 @@
+=== Supplied code output ===
+['A', 'B', 'E', 'G']
+['A', 'B', 'E', 'G']
+
+=== BFS trace (A -> G) ===
+Step Processed  Path          Queue after step
+1    A          A             ['B', 'C']
+2    B          A->B          ['C', 'D', 'E']
+3    C          A->C          ['D', 'E', 'F']
+4    D          A->B->D       ['E', 'F']
+5    E          A->B->E       ['F', 'G']
+6    F          A->C->F       ['G']
+7    G          A->B->E->G    GOAL FOUND
+Final path : ['A', 'B', 'E', 'G']
+Visit order: ['A', 'B', 'C', 'D', 'E', 'F', 'G'] (7 nodes processed incl. goal)
+
+=== DFS trace (A -> G) ===
+Step Processed  Path          Stack after step (bottom -> top)
+1    A          A             ['C', 'B']
+2    B          A->B          ['C', 'E', 'D']
+3    D          A->B->D       ['C', 'E']
+4    E          A->B->E       ['C', 'G']
+5    G          A->B->E->G    GOAL FOUND
+Final path : ['A', 'B', 'E', 'G']
+Visit order: ['A', 'B', 'D', 'E', 'G'] (5 nodes processed incl. goal)
+
+=== Edge-case tests ===
+Start == goal  BFS: ['A'] | DFS: ['A']
+Unreachable H  BFS: None | DFS: None
+Cycle graph A->C  BFS: ['A', 'B', 'C'] | DFS: ['A', 'B', 'C']
+Cycle graph, goal Z (unreachable)  BFS: None | DFS: None (terminates: no infinite loop)

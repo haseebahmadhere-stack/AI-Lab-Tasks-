@@ -1,0 +1,28 @@
+=== Weighted graph (edge: cost) ===
+  A -> B : 1
+  A -> C : 5
+  B -> D : 2
+  B -> E : 1
+  C -> F : 3
+  C -> G : 7   <-- ADDED corridor
+  E -> G : 1
+
+=== UCS A -> G ===
+Processing order (node, g-cost): [('A', 0), ('B', 1), ('E', 2), ('D', 3), ('G', 3)]
+Path: ['A', 'B', 'E', 'G'] | UCS reported cost: 3 | hops: 3
+Independent edge-sum: 1 + 1 + 1 = 3   (matches: True)
+
+=== BFS (fewest edges) on same weighted topology ===
+Processing order: ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+Path: ['A', 'C', 'G'] | hops: 2 | cost: 5 + 7 = 12
+
+=== Comparison ===
+BFS : 2 hops, cost 12
+UCS : 3 hops, cost 3
+Fewest hops != lowest cost: BFS minimises edge count only; UCS minimises total cost.
+
+=== Edge-case tests ===
+Start == goal : (['A'], 0, [('A', 0)])
+Unreachable H : (None, inf)
+Cycle graph A->C: (['A', 'B', 'C'], 3, [('A', 0), ('B', 1), ('C', 3)])
+Negative edge : Negative edge A->B=-1: UCS requires nonnegative costs

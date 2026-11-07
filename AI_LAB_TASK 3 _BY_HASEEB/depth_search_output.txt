@@ -1,0 +1,24 @@
+=== DLS on original graph (A -> G) ===
+limit=1: status=CUTOFF   path=None processed=['A', 'B', 'C'] (3 nodes)
+limit=2: status=CUTOFF   path=None processed=['A', 'B', 'D', 'E', 'C', 'F'] (6 nodes)
+limit=3: status=FOUND    path=['A', 'B', 'E', 'G'] processed=['A', 'B', 'D', 'E', 'G'] (5 nodes)
+limit=4: status=FOUND    path=['A', 'B', 'E', 'G'] processed=['A', 'B', 'D', 'E', 'G'] (5 nodes)
+
+=== IDDFS on original graph (A -> G) ===
+max_depth=1: status=CUTOFF   path=None limits_attempted=[0, 1] total_nodes_processed=4
+max_depth=2: status=CUTOFF   path=None limits_attempted=[0, 1, 2] total_nodes_processed=10
+max_depth=3: status=FOUND    path=['A', 'B', 'E', 'G'] limits_attempted=[0, 1, 2, 3] total_nodes_processed=15
+max_depth=4: status=FOUND    path=['A', 'B', 'E', 'G'] limits_attempted=[0, 1, 2, 3] total_nodes_processed=15
+
+=== Edge-case tests ===
+Start == goal  DLS(limit 0): ('FOUND', ['A'])
+Unreachable H, DLS limit 10: ('FAILURE', None) (whole graph exhausted)
+Unreachable H, DLS limit 2 : ('CUTOFF', None) (only bounded result, NOT proof)
+Unreachable H, IDDFS max 10: ('FAILURE', None, [0, 1, 2, 3])
+Cycle graph, goal Z, DLS limit 10: ('FAILURE', None) (terminates, no infinite loop)
+Cycle graph, goal C, IDDFS max 5 : ('FOUND', ['A', 'B', 'C'], [0, 1, 2], 6)
+
+=== Failure case: global visited set across branches (WRONG) vs path-local (RIGHT) ===
+Graph: {'A': ['B', 'C'], 'B': ['C'], 'C': ['D'], 'D': ['G'], 'G': []} | goal G needs A->C->D->G (depth 3)
+Global visited, limit 3: None
+Path-local    , limit 3: ('FOUND', ['A', 'C', 'D', 'G'])
