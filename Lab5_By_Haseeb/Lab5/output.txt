@@ -1,0 +1,42 @@
+### minimax.py
+The optimal value is: 5
+Leaves evaluated    : 8
+
+### alphabeta.py
+Alpha-beta value   : 5
+Leaves evaluated   : 6 of 8
+  PRUNE under MIN node (d=1, i=1): alpha=5 >= beta=5
+
+### experiments.py
+==========================================================================================
+TEST 1: Supplied trees
+==========================================================================================
+Manual alpha-beta tree (8 leaves)  minimax=5    alphabeta=5    leaves MM=8   AB=6   OK
+     PRUNE under MIN node (d=1, i=1): alpha=5 >= beta=5
+Manual minimax tree [3,5,2,9,0,7,0,0] minimax=5    alphabeta=5    leaves MM=8   AB=8   OK
+
+==========================================================================================
+TEST 2: Reordering branches (value must stay the same)
+==========================================================================================
+Original order                     minimax=5    alphabeta=5    leaves MM=8   AB=6   OK
+Swap leaf pairs                    minimax=5    alphabeta=5    leaves MM=8   AB=5   OK
+Swap subtrees (block=2)            minimax=5    alphabeta=5    leaves MM=8   AB=8   OK
+Swap halves (block=4)              minimax=5    alphabeta=5    leaves MM=8   AB=6   OK
+Swap pairs + subtrees              minimax=5    alphabeta=5    leaves MM=8   AB=8   OK
+16 leaves, good ordering           minimax=5    alphabeta=5    leaves MM=16  AB=8   OK
+16 leaves, bad ordering            minimax=5    alphabeta=5    leaves MM=16  AB=12  OK
+
+==========================================================================================
+TEST 3: Edge cases
+==========================================================================================
+Single leaf                        minimax=7    alphabeta=7    leaves MM=1   AB=1   OK
+Two leaves                         minimax=8    alphabeta=8    leaves MM=2   AB=2   OK
+All equal leaves                   minimax=5    alphabeta=5    leaves MM=8   AB=5   OK
+All negative leaves                minimax=-3   alphabeta=-3   leaves MM=8   AB=7   OK
+Contains +inf/-inf-like extremes   minimax=3    alphabeta=3    leaves MM=8   AB=7   OK
+
+==========================================================================================
+TEST 4: 500 random trees (depth 4, 16 leaves)
+==========================================================================================
+All 500 trees: root values identical, alpha-beta never used more leaves.
+Average leaves  Minimax=16.00  Alpha-Beta=11.84  (saved 26.0%)
