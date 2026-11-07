@@ -1,0 +1,151 @@
+#### Heuristic audit (supplied h) ####
+Admissibility check: h(n) <= true remaining cost h*(n)
+  S: h=5  h*=6  OK
+  A: h=4  h*=5  OK
+  B: h=4  h*=5  OK
+  C: h=2  h*=3  OK
+  G: h=0  h*=0  OK
+  admissible on this graph: True
+Consistency check: h(u) <= cost(u,v) + h(v) for every edge
+  S->A: 5 <= 1+4 = 5  OK
+  S->B: 5 <= 4+4 = 8  OK
+  A->C: 4 <= 2+2 = 4  OK
+  B->G: 4 <= 5+0 = 5  OK
+  C->G: 2 <= 3+0 = 3  OK
+  consistent: True
+
+#### Task 1/2: A* with supplied heuristic ####
+
+=== A* (supplied h) ===
+    frontier: [('S', 'g=0', 'f=5')]
+  pop S: g=0 h=5 f=5
+    push A: g=0+1=1, h=4, f=5
+    push B: g=0+4=4, h=4, f=8
+    frontier: [('A', 'g=1', 'f=5'), ('B', 'g=4', 'f=8')]
+  pop A: g=1 h=4 f=5
+    push C: g=1+2=3, h=2, f=5
+    frontier: [('C', 'g=3', 'f=5'), ('B', 'g=4', 'f=8')]
+  pop C: g=3 h=2 f=5
+    push G: g=3+3=6, h=0, f=6
+    frontier: [('G', 'g=6', 'f=6'), ('B', 'g=4', 'f=8')]
+  pop G: g=6 h=0 f=6
+  goal G reached (logged, not counted as expansion)
+  RESULT path=['S', 'A', 'C', 'G'] returned_cost=6 summed_cost=6
+  processed trace : ['S', 'A', 'C', 'G']
+  expanded nodes  : ['S', 'A', 'C']  (count=3)
+  stale skips     : []
+
+=== UCS control (h = 0 everywhere) ===
+    frontier: [('S', 'g=0', 'f=0')]
+  pop S: g=0 h=0 f=0
+    push A: g=0+1=1, h=0, f=1
+    push B: g=0+4=4, h=0, f=4
+    frontier: [('A', 'g=1', 'f=1'), ('B', 'g=4', 'f=4')]
+  pop A: g=1 h=0 f=1
+    push C: g=1+2=3, h=0, f=3
+    frontier: [('C', 'g=3', 'f=3'), ('B', 'g=4', 'f=4')]
+  pop C: g=3 h=0 f=3
+    push G: g=3+3=6, h=0, f=6
+    frontier: [('B', 'g=4', 'f=4'), ('G', 'g=6', 'f=6')]
+  pop B: g=4 h=0 f=4
+    reject G: g=4+5=9 not < best 6
+    frontier: [('G', 'g=6', 'f=6')]
+  pop G: g=6 h=0 f=6
+  goal G reached (logged, not counted as expansion)
+  RESULT path=['S', 'A', 'C', 'G'] returned_cost=6 summed_cost=6
+  processed trace : ['S', 'A', 'C', 'B', 'G']
+  expanded nodes  : ['S', 'A', 'C', 'B']  (count=4)
+  stale skips     : []
+
+#### Comparison table ####
+Run                   Path                Cost  Expanded  Processed trace
+A* (supplied h)       S->A->C->G          6     3       ['S', 'A', 'C', 'G']
+UCS (h=0)             S->A->C->G          6     4       ['S', 'A', 'C', 'B', 'G']
+
+#### Task 3: overestimate h(C): 2 -> 10 (true remaining = 3) ####
+Admissibility check: h(n) <= true remaining cost h*(n)
+  S: h=5  h*=6  OK
+  A: h=4  h*=5  OK
+  B: h=4  h*=5  OK
+  C: h=10  h*=3  OVERESTIMATE
+  G: h=0  h*=0  OK
+  admissible on this graph: False
+Consistency check: h(u) <= cost(u,v) + h(v) for every edge
+  S->A: 5 <= 1+4 = 5  OK
+  S->B: 5 <= 4+4 = 8  OK
+  A->C: 4 <= 2+10 = 12  OK
+  B->G: 4 <= 5+0 = 5  OK
+  C->G: 10 <= 3+0 = 3  FAIL
+  consistent: False
+
+=== A* with h(C)=10 ===
+    frontier: [('S', 'g=0', 'f=5')]
+  pop S: g=0 h=5 f=5
+    push A: g=0+1=1, h=4, f=5
+    push B: g=0+4=4, h=4, f=8
+    frontier: [('A', 'g=1', 'f=5'), ('B', 'g=4', 'f=8')]
+  pop A: g=1 h=4 f=5
+    push C: g=1+2=3, h=10, f=13
+    frontier: [('B', 'g=4', 'f=8'), ('C', 'g=3', 'f=13')]
+  pop B: g=4 h=4 f=8
+    push G: g=4+5=9, h=0, f=9
+    frontier: [('G', 'g=9', 'f=9'), ('C', 'g=3', 'f=13')]
+  pop G: g=9 h=0 f=9
+  goal G reached (logged, not counted as expansion)
+  RESULT path=['S', 'B', 'G'] returned_cost=9 summed_cost=9
+  processed trace : ['S', 'A', 'B', 'G']
+  expanded nodes  : ['S', 'A', 'B']  (count=3)
+  stale skips     : []
+
+#### Extra: overestimate that does NOT change the result: h(B): 4 -> 10 (true=5) ####
+
+=== A* with h(B)=10 ===
+    frontier: [('S', 'g=0', 'f=5')]
+  pop S: g=0 h=5 f=5
+    push A: g=0+1=1, h=4, f=5
+    push B: g=0+4=4, h=10, f=14
+    frontier: [('A', 'g=1', 'f=5'), ('B', 'g=4', 'f=14')]
+  pop A: g=1 h=4 f=5
+    push C: g=1+2=3, h=2, f=5
+    frontier: [('C', 'g=3', 'f=5'), ('B', 'g=4', 'f=14')]
+  pop C: g=3 h=2 f=5
+    push G: g=3+3=6, h=0, f=6
+    frontier: [('G', 'g=6', 'f=6'), ('B', 'g=4', 'f=14')]
+  pop G: g=6 h=0 f=6
+  goal G reached (logged, not counted as expansion)
+  RESULT path=['S', 'A', 'C', 'G'] returned_cost=6 summed_cost=6
+  processed trace : ['S', 'A', 'C', 'G']
+  expanded nodes  : ['S', 'A', 'C']  (count=3)
+  stale skips     : []
+
+#### Edge cases ####
+
+=== Edge 1: start == goal ===
+    frontier: [('G', 'g=0', 'f=0')]
+  pop G: g=0 h=0 f=0
+  goal G reached (logged, not counted as expansion)
+  RESULT path=['G'] returned_cost=0 summed_cost=0
+  processed trace : ['G']
+  expanded nodes  : []  (count=0)
+  stale skips     : []
+
+=== Edge 2: unreachable goal Z ===
+    frontier: [('S', 'g=0', 'f=5')]
+  pop S: g=0 h=5 f=5
+    push A: g=0+1=1, h=4, f=5
+    push B: g=0+4=4, h=4, f=8
+    frontier: [('A', 'g=1', 'f=5'), ('B', 'g=4', 'f=8')]
+  pop A: g=1 h=4 f=5
+    push C: g=1+2=3, h=2, f=5
+    frontier: [('C', 'g=3', 'f=5'), ('B', 'g=4', 'f=8')]
+  pop C: g=3 h=2 f=5
+    push G: g=3+3=6, h=0, f=6
+    frontier: [('G', 'g=6', 'f=6'), ('B', 'g=4', 'f=8')]
+  pop G: g=6 h=0 f=6
+    frontier: [('B', 'g=4', 'f=8')]
+  pop B: g=4 h=4 f=8
+    reject G: g=4+5=9 not < best 6
+  RESULT no path found
+  processed trace : ['S', 'A', 'C', 'G', 'B']
+  expanded nodes  : ['S', 'A', 'C', 'G', 'B']  (count=5)
+  stale skips     : []
