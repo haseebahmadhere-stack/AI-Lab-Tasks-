@@ -1,0 +1,8 @@
+Step Previous  Percept         Target  Outcome
+1    None      (29, True)      COOL    SEND COMMAND
+2    COOL      (29, True)      COOL    no command
+3    COOL      (26, True)      IDLE    SEND COMMAND
+4    IDLE      (20, True)      IDLE    no command
+5    IDLE      (19, True)      WARM    SEND COMMAND
+6    WARM      (29, False)     ECO     SEND COMMAND
+7    ECO       (15, False)     ECO     no command

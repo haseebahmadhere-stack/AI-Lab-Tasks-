@@ -1,0 +1,16 @@
+PASS reflex agent matches expected modes: ['COOL', 'COOL', 'IDLE', 'IDLE', 'WARM', 'ECO']
+PASS stateful agent: repeats, boundaries, transition, empty room
+PASS stateful targets identical to reflex targets (10-39 C)
+Comparison on 9 percepts: reflex sends 9 commands, stateful sends 3
+
+Edge case - noisy sequence around 26 C (occupied room):
+Step Previous  Percept         Target  Outcome
+1    None      (25.9, True)    IDLE    SEND COMMAND
+2    IDLE      (26.1, True)    COOL    SEND COMMAND
+3    COOL      (25.9, True)    IDLE    SEND COMMAND
+4    IDLE      (26.1, True)    COOL    SEND COMMAND
+5    COOL      (25.9, True)    IDLE    SEND COMMAND
+6    IDLE      (26.1, True)    COOL    SEND COMMAND
+Commands sent: 6 of 6 (rapid IDLE/COOL flipping)
+
+ALL CHECKS PASSED
